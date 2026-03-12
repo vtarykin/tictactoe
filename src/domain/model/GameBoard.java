@@ -1,36 +1,83 @@
 package domain.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameBoard {
-  private int rows;
-  private int cols;
-  private int[][] gameBoard;
-  private int value;
+
+  private static final int SIZE = 3;
+
+  private final Player[][] board;
+
   public GameBoard() {
-    this.rows = 3;
-    this.cols = 3;
-    this.gameBoard = new int[this.rows][this.cols];
+    this.board = new Player[SIZE][SIZE];
   }
-  public GameBoard(int rows, int cols) {
-    if (rows < 3 || cols < 3) {
-      throw new IllegalArgumentException("Board size must be at least 3x3");
+
+  public Player getCell(int row, int col) {
+    validate(row, col);
+    return board[row][col];
+  }
+
+  public boolean isEmpty(int row, int col) {
+    validate(row, col);
+    return board[row][col] == null;
+  }
+
+  public void applyMove(Move move) {
+
+    int row = move.getRow();
+    int col = move.getCol();
+
+    validate(row, col);
+
+    if (!isEmpty(row, col)) {
+      throw new IllegalStateException("Cell already occupied");
     }
-    this.rows = rows;
-    this.cols = cols;
-    this.gameBoard = new int[rows][cols];
+
+    board[row][col] = move.getPlayer();
   }
 
-  public void setValue(int rows, int cols, int value) {
-    this.gameBoard[rows][cols] = value;
+  public List<Move> getAvailableMoves(Player player) {
+
+    List<Move> moves = new ArrayList<>();
+
+    for (int r = 0; r < SIZE; r++) {
+      for (int c = 0; c < SIZE; c++) {
+
+        if (board[r][c] == null) {
+          moves.add(new Move(r, c, player));
+        }
+
+      }
+    }
+
+    return moves;
   }
 
-  public int getValue(int rows, int cols) {
-    return gameBoard[rows][cols];
+  public boolean isFull() {
+
+    for (int r = 0; r < SIZE; r++) {
+      for (int c = 0; c < SIZE; c++) {
+
+        if (board[r][c] == null) {
+          return false;
+        }
+
+      }
+    }
+
+    return true;
   }
 
-//  applyMove(Move) {
-//    return;
-//  }
-  //  public void setRows(int rows) {
-//    this.rows = rows;
-//  }
+  public int getSize() {
+    return SIZE;
+  }
+
+  private void validate(int row, int col) {
+
+    if (row < 0 || row >= SIZE || col < 0 || col >= SIZE) {
+      throw new IllegalArgumentException("Invalid position");
+    }
+
+  }
 }
