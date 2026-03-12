@@ -1,7 +1,7 @@
-package domain.model;
+package main.java.domain.model;
 
 public class GameRules {
-git
+
   public Player checkWinner(GameBoard board) {
     int size = board.getSize();
 

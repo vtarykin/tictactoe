@@ -1,6 +1,7 @@
-package domain.model;
+package main.java.domain.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameBoard {
@@ -11,6 +12,13 @@ public class GameBoard {
 
   public GameBoard() {
     this.board = new Player[SIZE][SIZE];
+  }
+
+  private GameBoard(Player[][] board) {
+    this.board = new Player[SIZE][SIZE];
+    for (int r = 0; r < SIZE; r++) {
+      this.board[r] = Arrays.copyOf(board[r], SIZE);
+    }
   }
 
   public Player getCell(int row, int col) {
@@ -79,5 +87,9 @@ public class GameBoard {
       throw new IllegalArgumentException("Invalid position");
     }
 
+  }
+
+  public GameBoard copy() {
+    return new GameBoard(this.board);
   }
 }

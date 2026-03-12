@@ -1,5 +1,5 @@
-package domain.service;
-import domain.model.CurrentGame;
+package main.java.domain.service;
+import main.java.domain.model.CurrentGame;
 
 public interface GameService {
   CurrentGame getNextMove();

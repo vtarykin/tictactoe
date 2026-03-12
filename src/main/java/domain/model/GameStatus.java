@@ -1,4 +1,4 @@
-package domain.model;
+package main.java.domain.model;
 
 public enum GameStatus {
   IN_PROGRESS,

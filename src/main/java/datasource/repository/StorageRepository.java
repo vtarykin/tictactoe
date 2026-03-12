@@ -1,4 +1,4 @@
-package datasource.repository;
+package main.java.datasource.repository;
 
 public class StorageRepository {
   void SaveGame() {
