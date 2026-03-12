@@ -36,4 +36,20 @@ class GameBoardTest {
     assertNull(board.getCell(1,1));  // оригинальная доска не изменилась
   }
 
+  @Test
+  void shouldThrowExceptionForInvalidPosition() {
+
+    GameBoard board = new GameBoard();
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> board.getCell(-1, 0)
+    );
+
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> board.getCell(3, 3)
+    );
+
+  }
 }
