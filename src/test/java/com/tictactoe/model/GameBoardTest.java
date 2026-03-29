@@ -1,6 +1,6 @@
 package test.java.domain.model;
 import org.junit.jupiter.api.Test;
-import main.java.domain.model.*;
+import main.java.com.tictactoe.domain.model.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

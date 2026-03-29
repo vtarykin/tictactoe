@@ -1,10 +1,10 @@
 package test.java.domain.model;
 
-import main.java.domain.model.GameBoard;
-import main.java.domain.model.GameRules;
-import main.java.domain.model.GameStatus;
-import main.java.domain.model.Move;
-import main.java.domain.model.Player;
+import main.java.com.tictactoe.domain.model.GameBoard;
+import main.java.com.tictactoe.domain.model.GameRules;
+import main.java.com.tictactoe.domain.model.GameStatus;
+import main.java.com.tictactoe.domain.model.Move;
+import main.java.com.tictactoe.domain.model.Player;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
