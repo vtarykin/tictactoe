@@ -19,11 +19,14 @@ public class GameController {
 
   private final GameService gameService;
   private final CurrentGameRepository repository;
-  private final CurrentGameWebMapper mapper = new CurrentGameWebMapper();
+  private final CurrentGameWebMapper mapper;
 
-  public GameController(GameService gameService, CurrentGameRepository repository) {
+  public GameController(GameService gameService,
+                        CurrentGameRepository repository,
+                        CurrentGameWebMapper mapper) {
     this.gameService = gameService;
     this.repository = repository;
+    this.mapper = mapper;
   }
   @PostMapping("/new")
   public ResponseEntity<CurrentGameDTO> newGame() {
