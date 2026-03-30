@@ -4,8 +4,7 @@ import org.example.tictactoe.domain.model.CurrentGame;
 
 public interface GameService {
   CurrentGame nextMove(CurrentGame game);
-  int evaluate(int[][] board);
-  boolean validateBoard(CurrentGame game);
+  String getGameResult(CurrentGame game);
   boolean isGameOver(CurrentGame game);
   boolean validateMove(CurrentGame oldGame, CurrentGame newGame);
 }

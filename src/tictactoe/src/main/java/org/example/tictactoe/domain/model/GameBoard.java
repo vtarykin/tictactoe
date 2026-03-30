@@ -4,7 +4,7 @@ public class GameBoard {
   private final int[][] board;
 
   public GameBoard() {
-    this.board = new int[3][3]; // 3x3 Tic-Tac-Toe
+    this.board = new int[3][3];
   }
 
   public int[][] getBoard() {
@@ -12,7 +12,7 @@ public class GameBoard {
   }
 
   public void setCell(int row, int col, int value) {
-    board[row][col] = value; // 1 = player, 2 = computer
+    board[row][col] = value;
   }
 
   public int getCell(int row, int col) {

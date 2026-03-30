@@ -1,7 +1,6 @@
 package org.example.tictactoe.datasource.service;
 
 import org.example.tictactoe.domain.model.CurrentGame;
-import org.example.tictactoe.domain.model.GameBoard;
 import org.example.tictactoe.domain.service.GameService;
 import org.example.tictactoe.datasource.repository.CurrentGameRepository;
 
@@ -11,6 +10,17 @@ public class GameServiceImpl implements GameService {
 
   public GameServiceImpl(CurrentGameRepository repository) {
     this.repository = repository;
+  }
+
+  @Override
+  public String getGameResult(CurrentGame game) {
+    int result = evaluate(game.getBoard().getBoard());
+
+    if (result == 10) return "Computer wins";
+    if (result == -10) return "Player wins";
+    if (isFull(game.getBoard().getBoard())) return "Draw";
+
+    return "In progress";
   }
 
   @Override
@@ -51,18 +61,6 @@ public class GameServiceImpl implements GameService {
     return game;
   }
 
-  @Override
-  public boolean validateBoard(CurrentGame game) {
-    int[][] board = game.getBoard().getBoard();
-
-    for (int[] row : board) {
-      for (int cell : row) {
-        if (cell < 0 || cell > 2) return false;
-      }
-    }
-    return true;
-  }
-
   private int minimax(int[][] board, int depth, boolean isMaximizing) {
     int result = evaluate(board);
 
@@ -100,7 +98,6 @@ public class GameServiceImpl implements GameService {
     }
   }
 
-  @Override
   public int evaluate(int[][] b) {
     for (int i = 0; i < 3; i++) {
       if (b[i][0] == b[i][1] && b[i][1] == b[i][2]) {

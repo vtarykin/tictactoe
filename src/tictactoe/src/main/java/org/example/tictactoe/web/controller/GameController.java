@@ -28,7 +28,7 @@ public class GameController {
   @PostMapping("/new")
   public ResponseEntity<CurrentGameDTO> newGame() {
     CurrentGame game = new CurrentGame();
-    repository.save(game); // <-- ОБЯЗАТЕЛЬНО
+    repository.save(game);
 
     return ResponseEntity.ok(mapper.toDTO(game));
   }
@@ -52,14 +52,9 @@ public class GameController {
 
       CurrentGame updated = gameService.nextMove(existingGame);
       if (gameService.isGameOver(updated)) {
-        int result = gameService.evaluate(updated.getBoard().getBoard());
-
-        if (result == 10) {
-          return ResponseEntity.ok("Computer wins!\n" + mapper.toDTO(updated));
-        } else if (result == -10) {
-          return ResponseEntity.ok("Player wins!\n" + mapper.toDTO(updated));
-        } else {
-          return ResponseEntity.ok("Draw!\n" + mapper.toDTO(updated));
+        String result = gameService.getGameResult(updated);
+        if (!result.equals("In progress")) {
+          return ResponseEntity.ok(result );
         }
       }
       return ResponseEntity.ok(mapper.toDTO(updated));

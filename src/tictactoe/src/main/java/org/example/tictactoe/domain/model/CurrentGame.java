@@ -7,12 +7,16 @@ public class CurrentGame {
   private final GameBoard board;
 
   public CurrentGame() {
-    this(UUID.randomUUID()); // старый конструктор
+    this(UUID.randomUUID(), new GameBoard());
   }
 
   public CurrentGame(UUID id) {
+    this(id, new GameBoard());
+  }
+
+  public CurrentGame(UUID id, GameBoard board) {
     this.id = id;
-    this.board = new GameBoard();
+    this.board = board;
   }
 
   public UUID getId() {

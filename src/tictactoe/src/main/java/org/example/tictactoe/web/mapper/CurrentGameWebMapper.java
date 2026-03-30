@@ -24,12 +24,15 @@ public class CurrentGameWebMapper {
   }
 
   public CurrentGame toDomain(CurrentGameDTO dto) {
-    CurrentGame game = new CurrentGame(dto.getId()); // передаем UUID
     int[][] src = dto.getBoard().getBoard();
-    int[][] dest = game.getBoard().getBoard();
+
+    GameBoard board = new GameBoard();
+    int[][] dest = board.getBoard();
+
     for (int i = 0; i < 3; i++) {
       System.arraycopy(src[i], 0, dest[i], 0, 3);
     }
-    return game;
+
+    return new CurrentGame(dto.getId(), board);
   }
 }
