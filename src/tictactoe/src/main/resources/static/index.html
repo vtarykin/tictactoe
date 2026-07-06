@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tic Tac Toe</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            font-size: 34px;
+        }
+
+        #board {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 12px;
+            padding: 25px;
+            background: #1e293b;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.5);
+        }
+
+        .cell {
+            width: 120px;
+            height: 120px;
+            font-size: 44px;
+            font-weight: bold;
+            border-radius: 14px;
+            border: none;
+            cursor: pointer;
+            background: #334155;
+            color: white;
+            transition: 0.15s;
+        }
+
+        .cell:hover {
+            background: #475569;
+            transform: scale(1.05);
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #fbbf24;
+            min-height: 28px;
+            text-align: center;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <h1>Tic Tac Toe</h1>
+
+    <div id="board"></div>
+
+    <div id="status"></div>
+
+    <button onclick="newGame()">New Game</button>
+</div>
+
+<script>
+    let gameId = null;
+    let board = [];
+
+    function renderBoard() {
+        const container = document.getElementById("board");
+        container.innerHTML = "";
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                const btn = document.createElement("button");
+                btn.className = "cell";
+
+                const val = board[i][j];
+
+                btn.textContent =
+                    val === 1 ? "X" :
+                    val === 2 ? "O" : "";
+
+                btn.onclick = () => makeMove(i, j);
+
+                container.appendChild(btn);
+            }
+        }
+    }
+
+    async function newGame() {
+        const res = await fetch("http://localhost:8080/game/new", {
+            method: "POST"
+        });
+
+        const data = await res.json();
+
+        gameId = data.id;
+        board = data.board.board;   // ✔ FIX
+
+        document.getElementById("status").textContent = "";
+        renderBoard();
+    }
+
+    async function makeMove(i, j) {
+        if (!gameId) return;
+        if (board[i][j] !== 0) return;
+
+        board[i][j] = 1;
+
+        const res = await fetch(`http://localhost:8080/game/${gameId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                id: gameId,
+                board: { board }   // ✔ важно: сохраняем структуру backend
+            })
+        });
+
+        const text = await res.text();
+
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            document.getElementById("status").textContent = text;
+            return;
+        }
+
+        board = data.board.board;   // ✔ FIX
+        renderBoard();
+    }
+
+    newGame();
+</script>
+
+</body>
+</html>

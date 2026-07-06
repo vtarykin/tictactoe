@@ -7,6 +7,7 @@ import org.example.tictactoe.domain.service.GameService;
 import org.example.tictactoe.web.mapper.CurrentGameWebMapper;
 import org.example.tictactoe.web.model.CurrentGameDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/game")
+@CrossOrigin(origins = "*")
 public class GameController {
 
   private final GameService gameService;
