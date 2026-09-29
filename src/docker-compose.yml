@@ -1,0 +1,6 @@
+services:
+  tictactoe:
+    build: .
+    container_name: tictactoe
+    ports:
+      - "8080:8080"
