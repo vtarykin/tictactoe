@@ -22,10 +22,13 @@ jobs:
           cache: gradle
 
       - name: Make gradlew executable
+        working-directory: src/tictactoe
         run: chmod +x ./gradlew
 
       - name: Run tests
+        working-directory: src/tictactoe
         run: ./gradlew test
 
       - name: Build
+        working-directory: src/tictactoe
         run: ./gradlew bootJar
