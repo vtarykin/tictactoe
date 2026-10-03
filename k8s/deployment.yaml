@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tictactoe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tictactoe
+  template:
+    metadata:
+      labels:
+        app: tictactoe
+    spec:
+      containers:
+        - name: tictactoe
+          image: ghcr.io/vtarykin/tictactoe:c04b186cc5d1a1a0d67004d727f206dee91f0179
+          ports:
+            - containerPort: 8080
