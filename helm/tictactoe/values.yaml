@@ -1,0 +1,10 @@
+replicaCount: 3
+
+image:
+  repository: ghcr.io/vtarykin/tictactoe
+  tag: "c04b186cc5d1a1a0d67004d727f206dee91f0179"
+  pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 8080
