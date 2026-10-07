@@ -54,10 +54,10 @@ jobs:
           push: true
           tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
-    deploy:
-      name: Deploy to Kubernetes
-      runs-on: [self-hosted, linux, x64]
-      needs: build
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: [self-hosted, linux, x64]
+    needs: build
 
       steps:
         - name: Update Kubernetes deployment
