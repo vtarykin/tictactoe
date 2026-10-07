@@ -113,3 +113,4 @@ jobs:
           echo "Deployment failed. Rolling back..."
           kubectl rollout undo deployment/tictactoe
           kubectl rollout status deployment/tictactoe --timeout=180s
+
