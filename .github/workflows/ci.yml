@@ -66,10 +66,18 @@ jobs:
             tictactoe=ghcr.io/${{ github.repository }}:${{ github.sha }}
 
       - name: Wait for rollout
+        id: rollout
         run: |
           kubectl rollout status deployment/tictactoe --timeout=180s
 
-      - name: Show deployment
+      - name: Check deployment
         run: |
           kubectl get deployment tictactoe
           kubectl get pods -l app.kubernetes.io/name=tictactoe
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "Deployment failed. Rolling back..."
+          kubectl rollout undo deployment/tictactoe
+          kubectl rollout status deployment/tictactoe --timeout=180s
