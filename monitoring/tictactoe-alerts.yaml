@@ -1,0 +1,30 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: tictactoe-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: tictactoe.availability
+      rules:
+        - alert: TicTacToeDeploymentUnavailable
+          expr: |
+            kube_deployment_status_replicas_available{namespace="default",deployment="tictactoe"} < 1
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "TicTacToe has no available replicas"
+            description: "Deployment tictactoe has had no available replicas for more than 2 minutes."
+
+        - alert: TicTacToeContainerRestarts
+          expr: |
+            sum by (pod) (increase(kube_pod_container_status_restarts_total{namespace="default",pod=~"tictactoe-.*",container!=""}[10m])) > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "TicTacToe container restarted"
+            description: "Pod {{ $labels.pod }} had container restarts in the last 10 minutes."
