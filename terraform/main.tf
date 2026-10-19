@@ -29,6 +29,7 @@ resource "kubernetes_deployment_v1" "tictactoe" {
     ignore_changes = [
       metadata[0].annotations["meta.helm.sh/release-name"],
       metadata[0].annotations["meta.helm.sh/release-namespace"],
+      spec[0].template[0].spec[0].container[0].image,
     ]
   }
 
@@ -68,7 +69,30 @@ resource "kubernetes_deployment_v1" "tictactoe" {
             protocol       = "TCP"
           }
 
-          resources {}
+          resources {
+            requests = {
+              cpu    = "100m"
+              memory = "256Mi"
+            }
+
+            limits = {
+              cpu    = "500m"
+              memory = "512Mi"
+            }
+          }
+
+          readiness_probe {
+            http_get {
+              path = "/"
+              port = 8080
+            }
+
+            initial_delay_seconds = 15
+            period_seconds        = 5
+            timeout_seconds       = 2
+            failure_threshold     = 6
+          }
+
         }
       }
     }
@@ -76,6 +100,7 @@ resource "kubernetes_deployment_v1" "tictactoe" {
 }
 
 resource "kubernetes_service_v1" "tictactoe" {
+
   metadata {
     name      = "tictactoe"
     namespace = "default"
@@ -103,5 +128,61 @@ resource "kubernetes_service_v1" "tictactoe" {
     }
 
     type = "NodePort"
+  }
+}
+
+resource "kubernetes_horizontal_pod_autoscaler_v2" "tictactoe" {
+
+  metadata {
+    name      = "tictactoe"
+    namespace = "default"
+  }
+
+  spec {
+    min_replicas = 1
+    max_replicas = 3
+
+    scale_target_ref {
+      api_version = "apps/v1"
+      kind        = "Deployment"
+      name        = "tictactoe"
+    }
+
+    metric {
+      type = "Resource"
+
+      resource {
+        name = "cpu"
+
+        target {
+          type                = "Utilization"
+          average_utilization = 60
+        }
+      }
+    }
+
+    behavior {
+      scale_up {
+        stabilization_window_seconds = 0
+        select_policy                = "Max"
+
+        policy {
+          type           = "Pods"
+          value          = 1
+          period_seconds = 60
+        }
+      }
+
+      scale_down {
+        stabilization_window_seconds = 300
+        select_policy                = "Min"
+
+        policy {
+          type           = "Pods"
+          value          = 1
+          period_seconds = 60
+        }
+      }
+    }
   }
 }
